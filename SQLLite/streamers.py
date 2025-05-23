@@ -10,29 +10,33 @@ TABLE_NAME_PARTIDAS = 'matches'
 connection = sqlite3.connect(DB_FILE)
 cursor = connection.cursor()
 
-# Criação da tabela de streamers
-cursor.execute(
-    f'''
-    CREATE TABLE IF NOT EXISTS {TABLE_NAME_STREAMERS} (
-        id_streamer INTEGER PRIMARY KEY AUTOINCREMENT,
-        nick_name TEXT,
-        puuid TEXT
-    )
-    '''
-)
 
-# Criação da tabela de partidas
-cursor.execute(
-    f'''
-    CREATE TABLE IF NOT EXISTS {TABLE_NAME_PARTIDAS} (
-        id_partida INTEGER PRIMARY KEY AUTOINCREMENT,
-        id_streamer INTEGER,
-        id_partidas_lol TEXT,
-        FOREIGN KEY(id_streamer) REFERENCES {TABLE_NAME_STREAMERS}(id_streamer)
-    )
-    '''
-)
+def create_table():
+    connection = sqlite3.connect(DB_FILE)
+    cursor = connection.cursor()
 
-connection.commit()
-cursor.close()
-connection.close()
+    cursor.execute(
+        f'''
+        CREATE TABLE IF NOT EXISTS {TABLE_NAME_STREAMERS} (
+            id_streamer INTEGER PRIMARY KEY AUTOINCREMENT,
+            nick_name TEXT,
+            puuid TEXT
+        )
+        '''
+    )
+
+    cursor.execute(
+        f'''
+        CREATE TABLE IF NOT EXISTS {TABLE_NAME_PARTIDAS} (
+            id_partida INTEGER PRIMARY KEY AUTOINCREMENT,
+            id_streamer INTEGER,
+            id_partidas_lol TEXT,
+            FOREIGN KEY(id_streamer) REFERENCES {TABLE_NAME_STREAMERS}(id_streamer)
+        )
+        '''
+    )
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+
